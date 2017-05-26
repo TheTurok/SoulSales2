@@ -22,6 +22,7 @@
 				category_id = Integer.parseInt(request.getSession().getAttribute("sess_category_id").toString());
 			}
 %>
+<!--  Change -->
 			<h3>
 				Add a new product
 			</h3>
