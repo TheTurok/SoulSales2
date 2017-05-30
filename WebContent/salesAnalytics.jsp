@@ -31,19 +31,17 @@
 		<option value="Top-K">Top-K</option>
 	</select>
 	
-	<!-- Query for alphabetical product list/names -->
+	<!-- Query for alphabetical product abc list/names -->
 	<sql:query dataSource="${db}" var="p_name_abc">
 		SELECT id, product_name FROM product ORDER BY product_name LIMIT 10;
 	</sql:query>
 	
-	<!-- Query for alphabetical product list/names -->
+	<!-- Query for alphabetical states abc list/names -->
 	<sql:query dataSource="${db}" var="s_name_abc">
 		SELECT id, state_name FROM state ORDER BY state_name LIMIT 20;
 	</sql:query>
 	
-	
-	
- 	<!-- Query for alphabetical customer names -->
+ 	<!-- Query for alphabetical customer abc names -->
 	<sql:query dataSource="${db}" var="c_name_abc">
 		SELECT id, person_name FROM person ORDER BY person_name LIMIT 20;
 	</sql:query>
