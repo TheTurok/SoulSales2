@@ -21,14 +21,12 @@
 	
 	<!-- Create row specifier dropdown -->
 	<select name="rows">
-		<option value="" disabled selected>Row Specifier</option>
 		<option value="Customers">Customers</option>
 		<option value="States">States</option>
 	</select>
 	
 	<!-- Create order specifier drop-down -->
 	<select name="order">
-		<option value="" disabled selected>Order Specifier</option>
 		<option value="Alphabetical">Alphabetical</option>
 		<option value="Top-K">Top-K</option>
 	</select>
@@ -74,5 +72,11 @@
 			</tr>
 		</c:forEach>
 	</table>
+	
+	
+	
+	
+	
+	
 </body>
 </html>
