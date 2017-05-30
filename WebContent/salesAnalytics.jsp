@@ -53,7 +53,7 @@
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
-				<td><c:out value="${p_name_row.product_name}" /></td>
+				<td><c:out value="${p_name_row.product_namse}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="c_name_row" items="${c_name_abc.rows}">
