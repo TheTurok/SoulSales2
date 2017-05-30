@@ -20,8 +20,8 @@
 	/>
 	
 	<!-- Create row specifier dropdown -->
-	<select name="rows">
-		<option value="Customers">Customers</option>
+	<select name="rows" id="row-specifier">
+		<option value="Customers" selected>Customers</option>
 		<option value="States" >States</option>
 	</select>
 	
@@ -46,8 +46,9 @@
 		SELECT id, person_name FROM person ORDER BY person_name LIMIT 20;
 	</sql:query>
 	
+
 	<!-- Sales Analytics Table product abc / customer abc -->
-	<table>
+	<table id="cust-table">
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
@@ -82,7 +83,7 @@
 	
 
 	<!-- Sales Analytics Table product abc / state abc -->
-	<table>
+	<table id="states-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
@@ -114,10 +115,6 @@
 	</table> 
 	<!-- END OF - Sales Analytics Table product abc / state abc -->
 	
-	
-	
-	
-	
-	
+<script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 </body>
 </html>
