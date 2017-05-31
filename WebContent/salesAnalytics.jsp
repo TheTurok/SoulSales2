@@ -270,36 +270,40 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc -->  
+	<!-- END OF - Sales Analytics Table product abc / state abc -->
 	
 	
 	<c:if test = "${not (c_name_abc.rowCount < 20 )}">
-		<form>
+		<form id="abc-cust-form">
 			<input type="submit" name="next_customers" value="Next 20 Customers"/>
 		</form>
 	</c:if>
+	
 	<c:if test = "${not (s_name_abc.rowCount < 20 )}">
-		<form>
-			<input type="submit" name="next_states" value="Next 20 States"/>
+		<form id="abc-state-form" style="display: none;">
+			<input type="submit" name="next_states" value="Next 20 States" />
 		</form>
 	</c:if>
+	
 	<c:if test = "${not (c_name_k.rowCount < 20)}">
-		<form>
+		<form id="k-cust-form" style="display: none;">
 			<input type="submit" name="next_customersk" value="Next 20 Customers"/>
 		</form>
 	</c:if>
+	
 	<c:if test = "${not (s_name_k.rowCount < 20)}">
-		<form>
+		<form id="k-state-form" style="display: none;">
 			<input type="submit" name="next_statesk" value="Next 20 States"/>
 		</form>
 	</c:if>
 
-		<form>
-			<input type="submit" name="next_products" value="Next 10 Products"/>
-		</form>
-		<form>
-			<input type="submit" name="next_productsk" value="Next 10 Products"/>
-		</form>
+	<form id="abc-prod-form">
+		<input type="submit" name="next_products" value="Next 10 Products"/>
+	</form>
+	
+	<form id="k-prod-form" style="display: none;">
+		<input type="submit" name="next_productsk" value="Next 10 Products"/>
+	</form>
 
 
 	
