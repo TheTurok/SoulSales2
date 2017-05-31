@@ -46,13 +46,70 @@
 		SELECT id, person_name FROM person ORDER BY person_name LIMIT 20;
 	</sql:query>
 	
+	
+	<!-- Query for top-k product names -->
+	<sql:query dataSource="${db}" var="p_name_k">
+		select product_id, product_name, sum(products_in_cart.price*quantity) as total from products_in_cart
+		left outer join shopping_cart on products_in_cart.cart_id = shopping_cart.id
+		left outer join person on person.id = shopping_cart.person_id
+		left outer join product on product.id = products_in_cart.product_id
+		group by product_id, product_name
+		order by total DESC
+		LIMIT 10;
+	</sql:query>
+	
+	<!-- Query for top-k customer names -->
+	<sql:query dataSource="${db}" var="c_name_k">
+		select person.id, person_name, sum(price*quantity) as total from products_in_cart
+		left outer join shopping_cart on products_in_cart.cart_id = shopping_cart.id
+		left outer join person on person.id = shopping_cart.person_id
+		group by person.id
+		order by total DESC
+		LIMIT 20;
+	</sql:query>
+	
+	
+	<!-- Sales Analytics Table product k / customer k -->
+	<table>
+		<tr>
+			<td>XXXXX</td>
+			<c:forEach var="p_name_row" items="${p_name_k.rows}">
+				<td><c:out value="${p_name_row.product_name}" /></td>
+			</c:forEach>
+		</tr>
+		<c:forEach var="c_name_row" items="${c_name_k.rows}">
+			<tr>
+				<td><c:out value="${c_name_row.person_name}"/></td>
+				<c:forEach var="p_name_row" items="${p_name_k.rows}">
+					<sql:query dataSource="${db}" var="calc_sum">
+						select person.id, product_id, sum(price*quantity) as total from products_in_cart
+						left outer join shopping_cart on products_in_cart.cart_id = shopping_cart.id
+						left outer join person on person.id = shopping_cart.person_id
+						where product_id = ? and person.id = ? and is_purchased = true
+						group by person.id, product_id;
+						<sql:param value="${p_name_row.product_id}"></sql:param>
+						<sql:param value="${c_name_row.id}"></sql:param>
+					</sql:query>
+					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
+						<td><c:out value="${calc_sum_row.total}"/></td>
+					</c:forEach>
+					<c:if test="${empty calc_sum.rows}">
+						<td>0</td>
+					</c:if>
+				</c:forEach>
+			</tr>
+		</c:forEach>
+	</table> 
+	<!-- END OF - Sales Analytics Table product k / customer k -->
+	
+	
 
-	<!-- Sales Analytics Table product abc / customer abc -->
+<%-- 	<!-- Sales Analytics Table product abc / customer abc -->
 	<table id="cust-table">
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
-				<td><c:out value="${p_name_row.product_namse}" /></td>
+				<td><c:out value="${p_name_row.product_name}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="c_name_row" items="${c_name_abc.rows}">
@@ -113,7 +170,7 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc -->
+	<!-- END OF - Sales Analytics Table product abc / state abc --> --%>
 	
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 </body>
