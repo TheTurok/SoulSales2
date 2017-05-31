@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*, java.sql.*, java.lang.Integer" %>
@@ -5,6 +6,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@page import="java.sql.Connection"%>
 <%@page import="ucsd.shoppingApp.*"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -20,7 +22,7 @@
 	/>
 	
 	<c:if test = "${empty offset}">
-		<c:set var="offset" scope="session" value="0" />
+		<c:set var="offset" scope="session"  value="0" />
 	</c:if>
 	
 	<c:if test= "${param.next_customers == 'Next 20 Customers'}">
@@ -135,15 +137,15 @@
 	
   	<!-- Sales Analytics Table product k / state k -->
 	<table id="top-k-states-table" style="display: none;">
-		<tr>
-			<td>XXXXX</td>
+		<tr >
+			<td style= "font-weight: bold">XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_k.rows}">
-				<td><c:out value="${p_name_row.product_name}" /></td>
+				<td style= "font-weight: bold"><c:out value="${fn:substring(p_name_row.product_name,0,10)}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="s_name_row" items="${s_name_k.rows}">
 			<tr>
-				<td><c:out value="${s_name_row.state_name}"/></td>
+				<td style= "font-weight: bold"><c:out value="${s_name_row.state_name}"/></td>
 				<c:forEach var="p_name_row" items="${p_name_k.rows}">
 					<sql:query dataSource="${db}" var="calc_sum">
 						select state_id, product_id, sum(price*quantity) as total from products_in_cart
@@ -155,10 +157,10 @@
 						<sql:param value="${s_name_row.id}"></sql:param>
 					</sql:query>
 					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
-						<td><c:out value="${calc_sum_row.total}"/></td>
+						<td>(<c:out value="${calc_sum_row.total}"/>)</td>
 					</c:forEach>
 					<c:if test="${empty calc_sum.rows}">
-						<td>0</td>
+						<td>(0)</td>
 					</c:if>
 				</c:forEach>
 			</tr>
@@ -172,14 +174,14 @@
  	<!-- Sales Analytics Table product k / customer k -->
 	<table id="top-k-cust-table" style="display: none;">
 		<tr>
-			<td>XXXXX</td>
+			<td style= "font-weight: bold" >XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_k.rows}">
-				<td><c:out value="${p_name_row.product_name}" /></td>
+				<td style= "font-weight: bold"><c:out value="${fn:substring(p_name_row.product_name,0,10)}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="c_name_row" items="${c_name_k.rows}">
 			<tr>
-				<td><c:out value="${c_name_row.person_name}"/></td>
+				<td style= "font-weight: bold"><c:out value="${c_name_row.person_name}"/></td>
 				<c:forEach var="p_name_row" items="${p_name_k.rows}">
 					<sql:query dataSource="${db}" var="calc_sum">
 						select person.id, product_id, sum(price*quantity) as total from products_in_cart
@@ -191,10 +193,10 @@
 						<sql:param value="${c_name_row.id}"></sql:param>
 					</sql:query>
 					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
-						<td><c:out value="${calc_sum_row.total}"/></td>
+						<td>(<c:out value="${calc_sum_row.total}"/>)</td>
 					</c:forEach>
 					<c:if test="${empty calc_sum.rows}">
-						<td>0</td>
+						<td>(0)</td>
 					</c:if>
 				</c:forEach>
 			</tr>
@@ -207,14 +209,14 @@
  	<!-- Sales Analytics Table product abc / customer abc -->
 	<table id="cust-table">
 		<tr>
-			<td>XXXXX</td>
+			<td style= "font-weight: bold">XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
-				<td><c:out value="${p_name_row.product_name}" /></td>
+				<td style= "font-weight: bold"><c:out value="${fn:substring(p_name_row.product_name,0,10)}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="c_name_row" items="${c_name_abc.rows}">
 			<tr>
-				<td><c:out value="${c_name_row.person_name}"/></td>
+				<td style= "font-weight: bold"><c:out value="${c_name_row.person_name}"/></td>
 				<c:forEach var="p_name_row" items="${p_name_abc.rows}">
 					<sql:query dataSource="${db}" var="calc_sum">
 						select person.id, product_id, sum(price*quantity) as total from products_in_cart
@@ -226,10 +228,10 @@
 						<sql:param value="${c_name_row.id}"></sql:param>
 					</sql:query>
 					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
-						<td><c:out value="${calc_sum_row.total}"/></td>
+						<td>(<c:out value="${calc_sum_row.total}"/>)</td>
 					</c:forEach>
 					<c:if test="${empty calc_sum.rows}">
-						<td>0</td>
+						<td>(0)</td>
 					</c:if>
 				</c:forEach>
 			</tr>
@@ -242,14 +244,14 @@
 	<!-- Sales Analytics Table product abc / state abc -->
 	<table id="states-table" style="display: none;">
 		<tr>
-			<td>XXXXX</td>
+			<td style= "font-weight: bold">XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_abc.rows}">
-				<td><c:out value="${p_name_row.product_name}" /></td>
+				<td style= "font-weight: bold"><c:out value="${fn:substring(p_name_row.product_name,0,10)}" /></td>
 			</c:forEach>
 		</tr>
 		<c:forEach var="s_name_row" items="${s_name_abc.rows}">
 			<tr>
-				<td><c:out value="${s_name_row.state_name}"/></td>
+				<td style= "font-weight: bold"><c:out value="${s_name_row.state_name}"/></td>
 				<c:forEach var="p_name_row" items="${p_name_abc.rows}">
 					<sql:query dataSource="${db}" var="calc_sum">
 						select state_id, product_id, sum(price*quantity) as total from products_in_cart
@@ -261,10 +263,10 @@
 						<sql:param value="${s_name_row.id}"></sql:param>
 					</sql:query>
 					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
-						<td><c:out value="${calc_sum_row.total}"/></td>
+						<td>(<c:out value="${calc_sum_row.total}"/>)</td>
 					</c:forEach>
 					<c:if test="${empty calc_sum.rows}">
-						<td>0</td>
+						<td>(0)</td>
 					</c:if>
 				</c:forEach>
 			</tr>
