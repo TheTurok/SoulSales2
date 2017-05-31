@@ -68,8 +68,54 @@
 		LIMIT 20;
 	</sql:query>
 	
+	<!-- Query for top-k states names -->
+	<sql:query dataSource="${db}" var="s_name_k">
+		select state.id, state_name, sum(price*quantity) as total from products_in_cart
+		left outer join shopping_cart on products_in_cart.cart_id = shopping_cart.id
+		left outer join person on person.id = shopping_cart.person_id
+        left outer join state on state.id = person.state_id
+		group by state.id
+		order by total DESC
+		LIMIT 20;
+	</sql:query>
 	
-	<!-- Sales Analytics Table product k / customer k -->
+	<!-- Sales Analytics Table product k / state k -->
+	<table id="top-k-states-table" ">
+		<tr>
+			<td>XXXXX</td>
+			<c:forEach var="p_name_row" items="${p_name_k.rows}">
+				<td><c:out value="${p_name_row.product_name}" /></td>
+			</c:forEach>
+		</tr>
+		<c:forEach var="s_name_row" items="${s_name_k.rows}">
+			<tr>
+				<td><c:out value="${s_name_row.state_name}"/></td>
+				<c:forEach var="p_name_row" items="${p_name_k.rows}">
+					<sql:query dataSource="${db}" var="calc_sum">
+						select state_id, product_id, sum(price*quantity) as total from products_in_cart
+						left outer join shopping_cart on products_in_cart.cart_id = shopping_cart.id
+						left outer join person on person.id = shopping_cart.person_id
+						where product_id = ? and state_id = ? and is_purchased = true
+						group by state_id, product_id;
+						<sql:param value="${p_name_row.product_id}"></sql:param>
+						<sql:param value="${s_name_row.id}"></sql:param>
+					</sql:query>
+					<c:forEach var="calc_sum_row" items="${calc_sum.rows}">
+						<td><c:out value="${calc_sum_row.total}"/></td>
+					</c:forEach>
+					<c:if test="${empty calc_sum.rows}">
+						<td>0</td>
+					</c:if>
+				</c:forEach>
+			</tr>
+		</c:forEach>
+	</table> 
+	<!-- END OF - Sales Analytics Table product k / state k -->
+	
+
+	
+	
+<%-- 	<!-- Sales Analytics Table product k / customer k -->
 	<table id="top-k-cust-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
@@ -170,7 +216,7 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc -->
+	<!-- END OF - Sales Analytics Table product abc / state abc --> --%>
 	
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 </body>
