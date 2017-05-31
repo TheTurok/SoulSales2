@@ -26,7 +26,7 @@
 	</select>
 	
 	<!-- Create order specifier drop-down -->
-	<select name="order">
+	<select name="order" id="order-specifier">
 		<option value="Alphabetical">Alphabetical</option>
 		<option value="Top-K">Top-K</option>
 	</select>
@@ -70,7 +70,7 @@
 	
 	
 	<!-- Sales Analytics Table product k / customer k -->
-	<table>
+	<table id="top-k-cust-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_k.rows}">
@@ -104,7 +104,7 @@
 	
 	
 
-<%-- 	<!-- Sales Analytics Table product abc / customer abc -->
+ 	<!-- Sales Analytics Table product abc / customer abc -->
 	<table id="cust-table">
 		<tr>
 			<td>XXXXX</td>
@@ -170,7 +170,7 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc --> --%>
+	<!-- END OF - Sales Analytics Table product abc / state abc -->
 	
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 </body>
