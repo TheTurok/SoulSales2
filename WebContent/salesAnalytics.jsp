@@ -80,7 +80,7 @@
 	</sql:query>
 	
 	<!-- Sales Analytics Table product k / state k -->
-	<table id="top-k-states-table" ">
+	<table id="top-k-states-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
 			<c:forEach var="p_name_row" items="${p_name_k.rows}">
@@ -115,7 +115,7 @@
 
 	
 	
-<%-- 	<!-- Sales Analytics Table product k / customer k -->
+ 	<!-- Sales Analytics Table product k / customer k -->
 	<table id="top-k-cust-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
@@ -216,7 +216,7 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc --> --%>
+	<!-- END OF - Sales Analytics Table product abc / state abc -->
 	
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 </body>
