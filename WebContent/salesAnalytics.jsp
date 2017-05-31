@@ -19,6 +19,54 @@
 	user="postgres" password="admin"
 	/>
 	
+	<c:if test = "${empty offset}">
+		<c:set var="offset" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_customers == 'Next 20 Customers'}">
+		<c:set var="offset" scope="session" value= "${offset+20}" />
+	</c:if>
+	
+	<c:if test = "${empty offstate}">
+		<c:set var="offstate" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_states == 'Next 20 States'}">
+		<c:set var="offstate" scope="session" value= "${offstate+20}" />
+	</c:if>
+	
+	<c:if test = "${empty offsetk}">
+		<c:set var="offsetk" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_customersk == 'Next 20 Customers'}">
+		<c:set var="offsetk" scope="session" value= "${offsetk+20}" />
+	</c:if>
+	
+	<c:if test = "${empty offstatek}">
+		<c:set var="offstatek" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_statesk == 'Next 20 States'}">
+		<c:set var="offstatek" scope="session" value= "${offstatek+20}" />
+	</c:if>
+	
+	<c:if test = "${empty offproduct}">
+		<c:set var="offproduct" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_products == 'Next 10 Products'}">
+		<c:set var="offproduct" scope="session" value= "${offproduct+10}" />
+	</c:if>
+	<c:if test = "${empty offproductk}">
+		<c:set var="offproductk" scope="session" value="0" />
+	</c:if>
+	
+	<c:if test= "${param.next_productsk == 'Next 10 Products'}">
+		<c:set var="offproductk" scope="session" value= "${offproductk+10}" />
+	</c:if>
+
+	
 	<!-- Create row specifier dropdown -->
 	<select name="rows" id="row-specifier">
 		<option value="Customers" selected>Customers</option>
@@ -33,17 +81,20 @@
 	
 	<!-- Query for alphabetical product abc list/names -->
 	<sql:query dataSource="${db}" var="p_name_abc">
-		SELECT id, product_name FROM product ORDER BY product_name LIMIT 10;
+		SELECT id, product_name FROM product ORDER BY product_name LIMIT 10 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offproduct)}" />
 	</sql:query>
 	
 	<!-- Query for alphabetical states abc list/names -->
 	<sql:query dataSource="${db}" var="s_name_abc">
-		SELECT id, state_name FROM state ORDER BY state_name LIMIT 20;
+		SELECT id, state_name FROM state ORDER BY state_name LIMIT 20 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offstate)}" />
 	</sql:query>
 	
  	<!-- Query for alphabetical customer abc names -->
 	<sql:query dataSource="${db}" var="c_name_abc">
-		SELECT id, person_name FROM person ORDER BY person_name LIMIT 20;
+		SELECT id, person_name FROM person ORDER BY person_name LIMIT 20 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offset)}" />
 	</sql:query>
 	
 	
@@ -55,7 +106,8 @@
 		left outer join product on product.id = products_in_cart.product_id
 		group by product_id, product_name
 		order by total DESC
-		LIMIT 10;
+		LIMIT 10 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offproductk)}" />
 	</sql:query>
 	
 	<!-- Query for top-k customer names -->
@@ -65,7 +117,8 @@
 		left outer join person on person.id = shopping_cart.person_id
 		group by person.id
 		order by total DESC
-		LIMIT 20;
+		LIMIT 20 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offsetk)}" />
 	</sql:query>
 	
 	<!-- Query for top-k states names -->
@@ -76,10 +129,11 @@
         left outer join state on state.id = person.state_id
 		group by state.id
 		order by total DESC
-		LIMIT 20;
+		LIMIT 20 OFFSET ?;
+		<sql:param value  = "${Integer.parseInt(offstatek)}" />
 	</sql:query>
 	
-	<!-- Sales Analytics Table product k / state k -->
+  	<!-- Sales Analytics Table product k / state k -->
 	<table id="top-k-states-table" style="display: none;">
 		<tr>
 			<td>XXXXX</td>
@@ -147,7 +201,7 @@
 		</c:forEach>
 	</table> 
 	<!-- END OF - Sales Analytics Table product k / customer k -->
-	
+	 
 	
 
  	<!-- Sales Analytics Table product abc / customer abc -->
@@ -216,8 +270,42 @@
 			</tr>
 		</c:forEach>
 	</table> 
-	<!-- END OF - Sales Analytics Table product abc / state abc -->
+	<!-- END OF - Sales Analytics Table product abc / state abc -->  
+	
+	
+	<c:if test = "${not (c_name_abc.rowCount < 20 )}">
+		<form>
+			<input type="submit" name="next_customers" value="Next 20 Customers"/>
+		</form>
+	</c:if>
+	<c:if test = "${not (s_name_abc.rowCount < 20 )}">
+		<form>
+			<input type="submit" name="next_states" value="Next 20 States"/>
+		</form>
+	</c:if>
+	<c:if test = "${not (c_name_k.rowCount < 20)}">
+		<form>
+			<input type="submit" name="next_customersk" value="Next 20 Customers"/>
+		</form>
+	</c:if>
+	<c:if test = "${not (s_name_k.rowCount < 20)}">
+		<form>
+			<input type="submit" name="next_statesk" value="Next 20 States"/>
+		</form>
+	</c:if>
+
+		<form>
+			<input type="submit" name="next_products" value="Next 10 Products"/>
+		</form>
+		<form>
+			<input type="submit" name="next_productsk" value="Next 10 Products"/>
+		</form>
+
+
+	
 	
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
+
+
 </body>
 </html>
