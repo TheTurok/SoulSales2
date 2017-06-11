@@ -21,7 +21,7 @@
 	user="postgres" password="admin"
 	/>
 	
-	
+	<!--  YOLO -->
 <script type="text/javascript" src="./js/salesAnalytics.js"></script>	
 
 
