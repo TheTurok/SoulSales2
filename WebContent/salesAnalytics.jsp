@@ -49,7 +49,7 @@ top_prod as
 	UNION ALL
 	select id as product_id, 0.0 as amount from product
 	) as product_union
-group by product_id order by dollar desc 
+group by product_id order by dollar desc limit 50
 ) 
 select row_number() over(order by dollar desc) as product_order, product_id, dollar from top_prod
 	</sql:query>
@@ -78,6 +78,11 @@ select row_number() over(order by dollar desc) as state_order, state_id, dollar 
 	</sql:query>
 	
 	
+	<% ArrayList<String> prodArray = new ArrayList<String>(); %>
+	<% ArrayList<String> stateArray = new ArrayList<String>(); 
+		int index1 = 0;
+		int index2 = 0;
+		%>
 
 	
 	
@@ -92,7 +97,10 @@ select row_number() over(order by dollar desc) as state_order, state_id, dollar 
 					<sql:param value="${topkprod_row.product_id}"></sql:param>
 				</sql:query>
 				<c:forEach var="state_name_row" items="${state_name.rows}">
-					<td style= "font-weight: bold"><c:out value="${fn:substring(state_name_row.product_name,0,10)}"></c:out></td>
+					<td style= "font-weight: bold"><c:out value="${fn:substring(state_name_row.product_name,0,10)}"></c:out>
+					<c:set var = "pn" value = "${state_name_row.product_name }" />
+					<% prodArray.add((String)pageContext.getAttribute("pn")); %>
+					(<c:out value="${topkprod_row.dollar}"></c:out>)</td>
 				</c:forEach>
 			</c:forEach>
 		</tr>
@@ -104,7 +112,9 @@ select row_number() over(order by dollar desc) as state_order, state_id, dollar 
 					<sql:param value = "${state_rows.state_id }"/>
 				</sql:query>
 				<c:forEach var="s_f" items="${state_finder.rows}">
-					<td style= "font-weight: bold"><c:out value="${s_f.state_name}"/></td>
+					<td style= "font-weight: bold"><c:out value="${s_f.state_name}"/>(<c:out value="${state_rows.dollar}"/>)</td>
+					<c:set var = "sn" value = "${s_f.state_name}" />
+					<% stateArray.add((String)pageContext.getAttribute("sn")); %>
 				</c:forEach>
 				
 				<sql:query dataSource="${db}" var = "price_list">
@@ -133,7 +143,7 @@ top_prod as
 	UNION ALL
 	select id as product_id, 0.0 as amount from product
 	) as product_union
-group by product_id order by dollar desc 
+group by product_id order by dollar desc limit 50
 ),
 top_n_prod as 
 (select row_number() over(order by dollar desc) as product_order, product_id, dollar from top_prod
@@ -149,17 +159,30 @@ select ts.state_id, s.state_name, tp.product_id, pr.product_name, COALESCE(ot.am
 		
 					<sql:param value = "${state_rows.state_id }"/>
 				</sql:query>
-				
 				<c:forEach var="price_list_row" items="${price_list.rows}">
-					<td ><c:out value="${price_list_row.cell_sum}"/></td>
+					<% String name = prodArray.get(index1) + stateArray.get(index2);
+					   pageContext.setAttribute("name", name);
+					%>
+					<td id="${name}" ><c:out value="${price_list_row.cell_sum}"/></td>
+					<c:set var="yolo" value = "${name}"/>
+					<% index1++;
+						System.out.println((String)pageContext.getAttribute("yolo"));
+					%>
+					
 				</c:forEach>		
 			</tr>
+			<%index1 = 0; %>
+			<%index2++; %>
 		</c:forEach>
 	</table> 
 	
 	
+	<button onclick="theRun()" style="position: fixed; left: 5%; right: 90%; bottom: 5%; "> Run </button>
+	<button onclick="theRefresh()" style="position: fixed; left: 90%; right: 5%; bottom: 5%;"> Refresh </button>
 	
 	
+	
+	<% System.out.println(stateArray); %>
 	
 	
 	
